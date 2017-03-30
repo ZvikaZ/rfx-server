@@ -2,6 +2,7 @@
 import os
 import sys
 import config
+import time
 
 
   
@@ -48,11 +49,11 @@ def send_somfy_cmd(remote_name, cmd):
         return result
     else:
         if cmd not in cmds:
-            return handle_percentage(remote_name, float(cmd))
+            return try_few_times(handle_percentage, remote_name, float(cmd))
         else:
             remote = config.remotes[remote_name]
-            cmd_string = "0C 1A 00 00 %s %s %s %s %s 00 00 00 %s" % (
-                remote.uid1, remote.uid2, remote.uid3, remote.unit,
+            cmd_string = "0C 1A 00 00 %s %s 00 00 00 %s" % (
+                remote.get_id_in_hexa(),    # four bytes
                 cmds[cmd],
                 config.SIGNAL_STENGTH
             )
@@ -60,16 +61,28 @@ def send_somfy_cmd(remote_name, cmd):
 
 def handle_percentage(remote_name, cmd):
     debug("handle_percentage: going to %d" % cmd)
-    time.sleep(10)    #TODO: replace this
-    if cmd == 0.0:
-        return try_few_times(send_somfy_cmd, remote_name, "UP")
-    elif cmd == 100.0:
-        return try_few_times(send_somfy_cmd, remote_name, "DOWN")
-    elif cmd == 50.0:
-        return try_few_times(send_somfy_cmd, remote_name, "MY")
-    else:
-        print "Donno"
-        return False
+    remote = config.remotes[remote_name]
+    actions = remote.analyze_percent(cmd)
+    print actions
+    for action in actions:
+        try:
+            time_to_wait = float(action) - config.LATENCY
+            print "Waiting %f seconds" % time_to_wait
+            time.sleep(time_to_wait)
+        except ValueError:
+            print "Doing %s" % action
+            if not send_somfy_cmd(remote_name, action):
+                return False
+    return True
+#    if cmd == 0.0:
+#        return try_few_times(send_somfy_cmd, remote_name, "UP")
+#    elif cmd == 100.0:
+#        return try_few_times(send_somfy_cmd, remote_name, "DOWN")
+#    elif cmd == 50.0:
+#        return try_few_times(send_somfy_cmd, remote_name, "MY")
+#    else:
+#        print "Donno"
+#        return False
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
