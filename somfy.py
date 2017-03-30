@@ -67,6 +67,8 @@ def handle_percentage(remote_name, cmd):
     for action in actions:
         try:
             time_to_wait = float(action) - config.LATENCY
+            if time_to_wait < 0:
+                time_to_wait = 0
             print "Waiting %f seconds" % time_to_wait
             time.sleep(time_to_wait)
         except ValueError:
