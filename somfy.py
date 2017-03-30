@@ -28,6 +28,7 @@ def try_few_times(func, *args):
 
 def send_rfx_cmd(cmd):
     debug("send_rfx_cmd: " + cmd)
+    #TODO: replace os.system with either subprocess, or even better, direct call to rfxcmd methods
     #os.system('rfxcmd_gc-0.3-beta.1/rfxcmd.py -v -s "%s"' % cmd)
     return os.system('%s %s -d %s -s "%s"' % (
         config.rfxcmd_location,
@@ -46,15 +47,29 @@ def send_somfy_cmd(remote_name, cmd):
             result &= try_few_times(send_somfy_cmd, remote, cmd)
         return result
     else:
-        remote = config.remotes[remote_name]
-        cmd_string = "0C 1A 00 00 %s %s %s %s %s 00 00 00 %s" % (
-            remote.uid1, remote.uid2, remote.uid3, remote.unit,
-            cmds[cmd],
-            config.SIGNAL_STENGTH
-        )
-        return send_rfx_cmd(cmd_string)
+        if cmd not in cmds:
+            return handle_percentage(remote_name, float(cmd))
+        else:
+            remote = config.remotes[remote_name]
+            cmd_string = "0C 1A 00 00 %s %s %s %s %s 00 00 00 %s" % (
+                remote.uid1, remote.uid2, remote.uid3, remote.unit,
+                cmds[cmd],
+                config.SIGNAL_STENGTH
+            )
+            return send_rfx_cmd(cmd_string)
 
-
+def handle_percentage(remote_name, cmd):
+    debug("handle_percentage: going to %d" % cmd)
+    time.sleep(10)    #TODO: replace this
+    if cmd == 0.0:
+        return try_few_times(send_somfy_cmd, remote_name, "UP")
+    elif cmd == 100.0:
+        return try_few_times(send_somfy_cmd, remote_name, "DOWN")
+    elif cmd == 50.0:
+        return try_few_times(send_somfy_cmd, remote_name, "MY")
+    else:
+        print "Donno"
+        return False
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
@@ -64,8 +79,8 @@ if __name__ == "__main__":
         command_name = sys.argv[2]
         if remote_name not in config.remotes and remote_name != "ALL":
             print "ERROR: %s isn't a recognized remote name.\n\nWe currently have the following remotes configured:\n%s" % (remote_name, config.remotes.keys())
-        elif command_name not in cmds:
-            print "ERROR: %s isn't a recognized command name.\n\nWe have the following commands:\n%s" % (command_name, cmds.keys())
+        elif not (command_name in cmds or (command_name.isdigit() and 0<=float(command_name)<=100)) :
+            print "ERROR: %s isn't a recognized command name.\n\nWe have the following commands:\n%s\nor any number from 0-100" % (command_name, cmds.keys())
         else:
             print send_somfy_cmd(sys.argv[1], sys.argv[2])
 
