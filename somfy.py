@@ -1,9 +1,24 @@
 #!/bin/python
 import os
 import sys
-import config
 import time
+import logging
 
+import config
+
+logger = logging.getLogger("SOMFY")
+logger.setLevel(logging.DEBUG)
+
+file_log_handler = logging.FileHandler('somfy.log')
+logger.addHandler(file_log_handler)
+
+stderr_log_handler = logging.StreamHandler()
+logger.addHandler(stderr_log_handler)
+
+# nice output format
+formatter = logging.Formatter('%(asctime)s [%(name)s] %(levelname)s:%(message)s')
+file_log_handler.setFormatter(formatter)
+stderr_log_handler.setFormatter(formatter)
 
   
 cmds = {
@@ -12,23 +27,19 @@ cmds = {
     "DOWN": "03",
 }
 
-def debug(s):
-    print s
-    pass
-
 def try_few_times(func, *args):
-    debug("try_few_times " + str(func) + ", " + str(args))
+    logger.debug("try_few_times " + str(func) + ", " + str(args))
     MAX_NUM_OF_TRIES = 4
     num_of_tries = 0
     while num_of_tries < MAX_NUM_OF_TRIES:
         num_of_tries += 1
         if func(*args):
-            debug("try_few_times: pass")
+            logger.debug("try_few_times: pass")
             return True
     return False
 
 def send_rfx_cmd(cmd):
-    debug("send_rfx_cmd: " + cmd)
+    logger.debug("send_rfx_cmd: " + cmd)
     #TODO: replace os.system with either subprocess, or even better, direct call to rfxcmd methods
     #os.system('rfxcmd_gc-0.3-beta.1/rfxcmd.py -v -s "%s"' % cmd)
     return os.system('%s %s -d %s -s "%s"' % (
@@ -38,7 +49,7 @@ def send_rfx_cmd(cmd):
         cmd)) == 0
 
 def send_somfy_cmd(remote_name, cmd):
-    debug("send_somfy_cmd: " + remote_name + ", "+ cmd)
+    logger.info("send_somfy_cmd: " + remote_name + ", "+ cmd)
     if remote_name == "ALL":
         result = True
         for remote in config.remotes.keys():
@@ -60,31 +71,22 @@ def send_somfy_cmd(remote_name, cmd):
             return send_rfx_cmd(cmd_string)
 
 def handle_percentage(remote_name, cmd):
-    debug("handle_percentage: going to %d" % cmd)
+    logger.debug("handle_percentage: going to %d" % cmd)
     remote = config.remotes[remote_name]
     actions = remote.analyze_percent(cmd)
-    print actions
+    logger.info("%s - %s : %s" % (remote_name, cmd, actions))
     for action in actions:
         try:
             time_to_wait = float(action) - config.LATENCY
             if time_to_wait < 0:
                 time_to_wait = 0
-            print "Waiting %f seconds" % time_to_wait
+            logger.debug("Waiting %f seconds" % time_to_wait)
             time.sleep(time_to_wait)
         except ValueError:
-            print "Doing %s" % action
+            logger.debug("Doing %s" % action)
             if not send_somfy_cmd(remote_name, action):
                 return False
     return True
-#    if cmd == 0.0:
-#        return try_few_times(send_somfy_cmd, remote_name, "UP")
-#    elif cmd == 100.0:
-#        return try_few_times(send_somfy_cmd, remote_name, "DOWN")
-#    elif cmd == 50.0:
-#        return try_few_times(send_somfy_cmd, remote_name, "MY")
-#    else:
-#        print "Donno"
-#        return False
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
@@ -93,10 +95,11 @@ if __name__ == "__main__":
         remote_name = sys.argv[1]
         command_name = sys.argv[2]
         if remote_name not in config.remotes and remote_name != "ALL":
-            print "ERROR: %s isn't a recognized remote name.\n\nWe currently have the following remotes configured:\n%s" % (remote_name, config.remotes.keys())
+            logger.error("%s isn't a recognized remote name.\n\nWe currently have the following remotes configured:\n%s" % (remote_name, config.remotes.keys()))
         elif not (command_name in cmds or (command_name.isdigit() and 0<=float(command_name)<=100)) :
-            print "ERROR: %s isn't a recognized command name.\n\nWe have the following commands:\n%s\nor any number from 0-100" % (command_name, cmds.keys())
+            logger.error("%s isn't a recognized command name.\n\nWe have the following commands:\n%s\nor any number from 0-100" % (command_name, cmds.keys()))
         else:
-            print send_somfy_cmd(sys.argv[1], sys.argv[2])
+            if not send_somfy_cmd(sys.argv[1], sys.argv[2]):
+                logger.error("Failed to execute")
 
     # print send_somfy_cmd("UP_OUT", "MY")
