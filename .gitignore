@@ -1,3 +1,4 @@
 .*sw?
 *.pyc
 rfxcmd.log
+somfy.log

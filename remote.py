@@ -15,11 +15,11 @@ class Remote:
 
     def analyze_percent(self, percent):
         if percent == TOP_PERCENT:
-            return ("UP")
+            return ("UP",)
         elif percent == BOTTOM_PERCENT:
-            return ("DOWN")
+            return ("DOWN",)
         elif percent == self.my_percent:
-            return ("MY")
+            return ("MY",)
         elif TOP_PERCENT < percent <= self.middle_percent:
             time = percent / self.my_percent * self.up_to_my
             return ("UP", self.max_time, "DOWN", time, "MY")

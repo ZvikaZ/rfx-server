@@ -50,9 +50,9 @@ def send_rfx_cmd(cmd):
 
 def send_somfy_cmd(remote_name, cmd):
     logger.info("send_somfy_cmd: " + remote_name + ", "+ cmd)
-    if remote_name == "ALL":
+    if remote_name in config.groups:
         result = True
-        for remote in config.remotes.keys():
+        for remote in config.groups[remote_name]:
             # regular 'AND' operator uses short-circuit-logic, which will stop the 
             # process upon any failure.
             # but I want to continue even then, therefore using the binary '&' bitwise
@@ -94,7 +94,7 @@ if __name__ == "__main__":
     else:
         remote_name = sys.argv[1]
         command_name = sys.argv[2]
-        if remote_name not in config.remotes and remote_name != "ALL":
+        if remote_name not in config.remotes and remote_name not in config.groups:
             logger.error("%s isn't a recognized remote name.\n\nWe currently have the following remotes configured:\n%s" % (remote_name, config.remotes.keys()))
         elif not (command_name in cmds or (command_name.isdigit() and 0<=float(command_name)<=100)) :
             logger.error("%s isn't a recognized command name.\n\nWe have the following commands:\n%s\nor any number from 0-100" % (command_name, cmds.keys()))

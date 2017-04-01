@@ -16,3 +16,11 @@ remotes = {
     'SALON_OUT': Remote(id=(7, 7, 8, 4)),
     'PARENTS': Remote(id=(7, 7, 7, 2)),
 }
+
+groups = {
+    # 'ALL' is a predefined group, containing - ALL remotes
+    'PUBLIC': ['KITCHEN1', 'KITCHEN2', 'SALON_SMALL', 'SALON_OUT'],
+    'PUBLIC_SMALL': ['KITCHEN1', 'KITCHEN2', 'SALON_SMALL', ],
+}
+
+groups['ALL'] = remotes.keys()
