@@ -72,7 +72,7 @@
 					    <input class="form-check-input" type="radio" name="cmd" id="NUMERICAL" value="NUMERICAL"> 
 						<label class="form-label" for="cmdRange">
 							פתיחת תריס באחוזים:
-							<output id="percent">50</output>
+							<output id="percent">90</output>
 						</label>
 						<div class="range">
 							<input type="range" class="form-range" id="cmdRange" oninput="rangeInput()"> 
@@ -116,8 +116,9 @@
 				// clean usage - use defaults
 				$("#SALON_OUT").attr("checked", true)
 				$("#MY").attr("checked", true)
-				$("#cmdRange").val(50)
-				$("#percent").val(50)
+				$("#cmdRange").val(90)
+				// $("#cmdRange").attr("disabled", true)
+				$("#percent").val(90)
 			} else {
 				// url has query
 				$("#" + params.room).attr("checked", true)
@@ -125,8 +126,10 @@
 					$("#NUMERICAL").attr("checked", true)
 					$("#cmdRange").val(params.cmd)
 					$("#percent").val(params.cmd)
-				} else 
+				} else {
 					$("#" + params.cmd).attr("checked", true)
+					// $("#cmdRange").attr("disabled", true)
+				}
 			}
 		}
 		window.onload = setDefaults;
