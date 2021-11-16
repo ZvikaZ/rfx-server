@@ -105,15 +105,13 @@
 		}
 
 		function percentChange(value) {
-			console.log("percentChange,  " + value)
-			$("#NUMERICAL").attr("checked", "checked")
+			document.getElementById("NUMERICAL").checked = true
 			$("#cmdRange").val(value)
 		}
 
 		function rangeInput() {
-			$("#NUMERICAL").attr("checked", "checked")
+			document.getElementById("NUMERICAL").checked = true
 			percent.value = cmdRange.value
-			console.log("rangeInput, cmdRange is: " + cmdRange.value)
 		}
 
 		function setDefaults() {
