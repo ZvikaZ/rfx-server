@@ -90,7 +90,7 @@ def handle_percentage(remote_name, cmd):
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
-        print "Usage:\n%s <remote_name> <command>\n" % sys.argv[0]
+        print("Usage:\n%s <remote_name> <command>\n" % sys.argv[0])
     else:
         remote_name = sys.argv[1]
         command_name = sys.argv[2]
