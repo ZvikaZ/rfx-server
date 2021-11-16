@@ -72,7 +72,7 @@
 					    <input class="form-check-input" type="radio" name="cmd" id="NUMERICAL" value="NUMERICAL"> 
 						<label class="form-label" for="cmdRange">
 							פתיחת תריס באחוזים:
-							<output id="percent">90</output>
+							<input type="number" id="percent" class="form-control" min=0 max=100 value=90 oninput="percentChange(this.value)">
 						</label>
 						<div class="range">
 							<input type="range" class="form-range" id="cmdRange" oninput="rangeInput()"> 
@@ -104,9 +104,16 @@
 			window.location.href = "http://192.168.1.12:8080/?room=" + tris + "&cmd=" + cmd
 		}
 
+		function percentChange(value) {
+			console.log("percentChange,  " + value)
+			$("#NUMERICAL").attr("checked", "checked")
+			$("#cmdRange").val(value)
+		}
+
 		function rangeInput() {
-			$("#NUMERICAL").attr("checked", true)
+			$("#NUMERICAL").attr("checked", "checked")
 			percent.value = cmdRange.value
+			console.log("rangeInput, cmdRange is: " + cmdRange.value)
 		}
 
 		function setDefaults() {
@@ -117,15 +124,15 @@
 				$("#SALON_OUT").attr("checked", true)
 				$("#MY").attr("checked", true)
 				$("#cmdRange").val(90)
+				$("#percent").value = 90
 				// $("#cmdRange").attr("disabled", true)
-				$("#percent").val(90)
 			} else {
 				// url has query
 				$("#" + params.room).attr("checked", true)
 				if ($.isNumeric(params.cmd)) {
 					$("#NUMERICAL").attr("checked", true)
 					$("#cmdRange").val(params.cmd)
-					$("#percent").val(params.cmd)
+					$("#percent").value = params.cmd
 				} else {
 					$("#" + params.cmd).attr("checked", true)
 					// $("#cmdRange").attr("disabled", true)
