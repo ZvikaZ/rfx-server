@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="he">
+<head>
+<meta charset="UTF-8">
+<title>Page Title</title>
+</head>
+<body>
+
+<select id="room">
+	<option value="SALON_OUT">סלון למרפסת</option>
+	<option value="SALON_SMALL">סלון קטן</option>
+	<option value="KITCHEN1">מטבח 1</option>
+	<option value="KITCHEN2">מטבח 2</option>
+	<option value="PARENTS">הורים</option>
+	<option value="UP_OUT">למעלה</option>
+	<option value="ALL">-- הכל</option>
+	<option value="PUBLIC">-- ציבורי</option>
+</select>
+
+<select id="cmd">
+	<option value="UP">למעלה</option>
+	<option value="MY">MY</option>
+	<option value="DOWN">למטה</option>
+</select>
+
+<button onclick="sendToSomfy()">בצע פקודה</button>
+
+
+
+<script>
+function sendToSomfy() {
+	window.location.href = "http://192.168.1.12:8080/?room=" + room.value + "&cmd=" + cmd.value
+}
+</script>
+
+</body>
+</html>
+
