@@ -103,7 +103,21 @@
 			if (cmd == 'NUMERICAL')
 				cmd = $("#percent").val()
 
-			window.location.href = "http://192.168.1.12:8080/?room=" + tris + "&cmd=" + cmd
+			var httpRequest = new XMLHttpRequest();
+			httpRequest.onreadystatechange = function alertContents() {
+				if (httpRequest.readyState === XMLHttpRequest.DONE) {
+					if (httpRequest.status === 200) {
+						// alert(httpRequest.responseText);
+						alert("בוצע")
+					} else {
+						// alert("היתה תקלה");
+					}
+				}
+			}
+
+			httpRequest.open('POST', 'index.html');
+			httpRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+			httpRequest.send("room=" + tris + "&cmd=" + cmd);
 		}
 
 		function percentChange(value) {
@@ -117,30 +131,15 @@
 		}
 
 		function setDefaults() {
-			const urlSearchParams = new URLSearchParams(window.location.search);
-			const params = Object.fromEntries(urlSearchParams.entries());
-			if ($.isEmptyObject(params)) {
-				// clean usage - use defaults
-				$("#SALON_OUT").attr("checked", true)
-				$("#MY").attr("checked", true)
-				$("#cmdRange").val(90)
-				$("#percent").val(90)
-				// $("#cmdRange").attr("disabled", true)
-			} else {
-				// url has query
-				$("#" + params.room).attr("checked", true)
-				if ($.isNumeric(params.cmd)) {
-					$("#NUMERICAL").attr("checked", true)
-					$("#cmdRange").val(params.cmd)
-					$("#percent").val(params.cmd)
-				} else {
-					$("#" + params.cmd).attr("checked", true)
-					// $("#cmdRange").attr("disabled", true)
-				}
-			}
+			$("#SALON_OUT").attr("checked", true)
+			$("#MY").attr("checked", true)
+			$("#cmdRange").val(90)
+			$("#percent").val(90)
+			// $("#cmdRange").attr("disabled", true)
 		}
+
 		window.onload = setDefaults;
-		
+
 	</script>
 
 	<!-- Bootstrap -->

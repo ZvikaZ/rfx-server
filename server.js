@@ -1,21 +1,34 @@
 const http = require('http')
 const fs = require('fs')
-const url = require('url');
+const qs = require('querystring');
 
 
 const server = http.createServer((req, res) => {
-	res.writeHead(200, { 'content-type': 'text/html' })
+    res.writeHead(200, {'content-type': 'text/html'})
 
-	const queryObject = url.parse(req.url,true).query;
-	console.log(queryObject.room + " " + queryObject.cmd);
+    if (req.method == "POST") {
+        var postdata = "";
+        req.on('data', function (postdataChunk) {
+            postdata += postdataChunk;
+        });
 
-	const { spawnSync } = require( 'child_process' );
-	const ls = spawnSync( '/home/zvika/RFXCMD/somfy.py', [ queryObject.room, queryObject.cmd ] );
+        req.on('end', function () {
+            var paramstring = qs.parse(postdata)
+            console.log(paramstring.room + " " + paramstring.cmd)
 
-	console.log( `stderr: ${ ls.stderr.toString() }` );
-	console.log( `stdout: ${ ls.stdout.toString() }` );
+            const {spawnSync} = require('child_process');
+            const exec = spawnSync('/home/zvika/RFXCMD/somfy.py', [paramstring.room, paramstring.cmd]);
 
-	fs.createReadStream('index.html').pipe(res)
+            if (exec.status == 0) {
+                console.log(`stderr: ${exec.stderr.toString()}`);
+                console.log(`stdout: ${exec.stdout.toString()}`);
+            } else {
+                console.log("Failed to run somfy.py")
+            }
+        });
+    }
+
+    fs.createReadStream('index.html').pipe(res)
 })
 
 server.listen(8080)
