@@ -1,149 +1,205 @@
 <!DOCTYPE html>
 <html dir="rtl" lang="he">
 <head>
-	<meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-	<!-- jquery -->
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- jquery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-	<!-- Bootstrap -->
+    <!-- Bootstrap -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.rtl.min.css" integrity="sha384-+qdLaIRZfNu4cVPK/PxJJEy0B0f3Ugv8i482AKY7gwXwhaCroABd086ybrVKTa0q" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.rtl.min.css"
+          integrity="sha384-+qdLaIRZfNu4cVPK/PxJJEy0B0f3Ugv8i482AKY7gwXwhaCroABd086ybrVKTa0q" crossorigin="anonymous">
 
-	<title>Haramaty House Control</title>
+    <title>Haramaty House Control</title>
 </head>
 <body>
-	<div class="container">
-		<div class="row">
-			<div class="col">
-				<fieldset>
-					<legend>תריס</legend>
-					<div class="form-check">
-					  <input class="form-check-input" type="radio" name="tris" id="SALON_OUT" value="SALON_OUT">
-					  <label class="form-check-label" for="tris1"> סלון מרפסת </label>
-					</div>
-					<div class="form-check">
-					  <input class="form-check-input" type="radio" name="tris" id="SALON_SMALL" value="SALON_SMALL" >   
-					  <label class="form-check-label" for="tris2"> סלון קטן </label>
-					</div>
-					<div class="form-check">
-					  <input class="form-check-input" type="radio" name="tris" id="KITCHEN1" value="KITCHEN1" >   
-					  <label class="form-check-label" for="tris3"> מטבח דרום </label>
-					</div>
-					<div class="form-check">
-					  <input class="form-check-input" type="radio" name="tris" id="KITCHEN2" value="KITCHEN2" >   
-					  <label class="form-check-label" for="tris4"> מטבח מזרח </label>
-					</div>
-					<div class="form-check">
-					  <input class="form-check-input" type="radio" name="tris" id="PARENTS" value="PARENTS" >   
-					  <label class="form-check-label" for="tris5"> הורים </label>
-					</div>
-					<div class="form-check">
-					  <input class="form-check-input" type="radio" name="tris" id="UP_OUT" value="UP_OUT" >   
-					  <label class="form-check-label" for="tris6"> מרפסת למעלה </label>
-					</div>
-					<div class="form-check">
-					  <input class="form-check-input" type="radio" name="tris" id="ALL" value="ALL" >   
-					  <label class="form-check-label" for="tris7"> (קבוצה) הכל</label>
-					</div>
-					<div class="form-check">
-					  <input class="form-check-input" type="radio" name="tris" id="PUBLIC" value="PUBLIC" >   
-					  <label class="form-check-label" for="tris8"> (קבוצה) ציבורי </label>
-					</div>
-				</fieldset>
-			</div>
+<div class="container">
+    <div class="row">
+        <h3>הזזת תריס</h3>
+    </div>
+    <div class="row">
+        <div class="col">
+            <fieldset>
+                <legend>תריס</legend>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="tris" id="SALON_OUT" value="SALON_OUT">
+                    <label class="form-check-label" for="tris1"> סלון מרפסת </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="tris" id="SALON_SMALL" value="SALON_SMALL">
+                    <label class="form-check-label" for="tris2"> סלון קטן </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="tris" id="KITCHEN1" value="KITCHEN1">
+                    <label class="form-check-label" for="tris3"> מטבח דרום </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="tris" id="KITCHEN2" value="KITCHEN2">
+                    <label class="form-check-label" for="tris4"> מטבח מזרח </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="tris" id="PARENTS" value="PARENTS">
+                    <label class="form-check-label" for="tris5"> הורים </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="tris" id="UP_OUT" value="UP_OUT">
+                    <label class="form-check-label" for="tris6"> מרפסת למעלה </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="tris" id="ALL" value="ALL">
+                    <label class="form-check-label" for="tris7"> (קבוצה) הכל</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="tris" id="PUBLIC" value="PUBLIC">
+                    <label class="form-check-label" for="tris8"> (קבוצה) ציבורי </label>
+                </div>
+            </fieldset>
+        </div>
 
-			<div class="col">
-				<fieldset>
-					<legend>פקודה</legend>
-					<div class="form-check">
-					  <input class="form-check-input" type="radio" name="cmd" id="UP" value="UP">
-					  <label class="form-check-label" for="cmd1"> למעלה </label>
-					</div>
-					<div class="form-check">
-					  <input class="form-check-input" type="radio" name="cmd" id="MY" value="MY">
-					  <label class="form-check-label" for="cmd2"> MY </label>
-					</div>
-					<div class="form-check">
-					  <input class="form-check-input" type="radio" name="cmd" id="DOWN" value="DOWN"> 
-					  <label class="form-check-label" for="cmd3"> למטה </label>
-					</div>
-					<div class="form-check">
-					    <input class="form-check-input" type="radio" name="cmd" id="NUMERICAL" value="NUMERICAL"> 
-						<label class="form-label" for="cmdRange">
-							<div class="input-group mb-3">
-								<label>סגירה חלקית (באחוזים): &nbsp;</label>
-								<input type="number" id="percent" class="form-control" min=0 max=100 value=90 oninput="percentChange(this.value)">
-							</div>
-						</label>
-						<div class="range">
-							<input type="range" class="form-range" id="cmdRange" oninput="rangeInput()"> 
-						</div>
-					</div>
-				</fieldset>
+        <div class="col">
+            <fieldset>
+                <legend>פקודה</legend>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="cmd" id="UP" value="UP">
+                    <label class="form-check-label" for="cmd1"> למעלה </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="cmd" id="MY" value="MY">
+                    <label class="form-check-label" for="cmd2"> MY </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="cmd" id="DOWN" value="DOWN">
+                    <label class="form-check-label" for="cmd3"> למטה </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="cmd" id="NUMERICAL" value="NUMERICAL">
+                    <label class="form-label" for="cmdRange">
+                        <div class="input-group mb-3">
+                            <label>סגירה חלקית (באחוזים): &nbsp;</label>
+                            <input type="number" id="percent" class="form-control" min=0 max=100 value=90
+                                   oninput="percentChange(this.value)">
+                        </div>
+                    </label>
+                    <div class="range">
+                        <input type="range" class="form-range" id="cmdRange" oninput="rangeInput()">
+                    </div>
+                </div>
+            </fieldset>
 
-			</div>
-		</div>
+        </div>
+    </div>
 
-		<div class="row">
-			<div class="col">
-			    <p>
-			    <p>
-				<button type="button" class="btn btn-primary" onclick="sendToSomfy()">בצע פקודה</button>
-			</div>
-		</div>
-	</div>
+    <div class="row">
+        <div class="col">
+            <p>
+            <p>
+                <button type="button" class="btn btn-primary" onclick="sendToSomfy()">בצע פקודה</button>
+        </div>
+    </div>
+
+    <div class="row">
+        <p></p>
+        <h3>פקודות קיימות במערכת</h3>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <table class="table table-striped table-hover">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">יום</th>
+                    <th scope="col">שעה</th>
+                    <th scope="col">תריס</th>
+                    <th scope="col">פקודה</th>
+                </tr>
+                </thead>
+                <tbody id="cronCmdTableBody">
+                <tr>
+                    <th scope="row">1</th>
+                    <td>כל יום</td>
+                    <td>23:00</td>
+                    <td>מטבח מזרח</td>
+                    <td>למטה</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 
 
+</div>
 
-	<script>
-		function sendToSomfy() {
-			var tris = $('input[name=tris]:checked').val()
-			var cmd = $('input[name=cmd]:checked').val()
-			if (cmd == 'NUMERICAL')
-				cmd = $("#percent").val()
 
-			var httpRequest = new XMLHttpRequest();
-			httpRequest.onreadystatechange = function alertContents() {
-				if (httpRequest.readyState === XMLHttpRequest.DONE) {
-					if (httpRequest.status === 200 && httpRequest.responseText == "OK")  {
-						alert("בוצע")
-					} else {
-						alert("היתה תקלה");
-					}
-				}
-			}
+<script>
+    function sendToSomfy() {
+        var tris = $('input[name=tris]:checked').val()
+        var cmd = $('input[name=cmd]:checked').val()
+        if (cmd == 'NUMERICAL')
+            cmd = $("#percent").val()
 
-			httpRequest.open('POST', 'index.html');
-			httpRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-			httpRequest.send("room=" + tris + "&cmd=" + cmd);
-		}
+        var httpRequest = new XMLHttpRequest();
+        httpRequest.onreadystatechange = function alertContents() {
+            if (httpRequest.readyState === XMLHttpRequest.DONE) {
+                if (httpRequest.status === 200 && httpRequest.responseText == "OK") {
+                    alert("בוצע")
+                } else {
+                    alert("היתה תקלה");
+                }
+            }
+        }
 
-		function percentChange(value) {
-			document.getElementById("NUMERICAL").checked = true
-			$("#cmdRange").val(value)
-		}
+        httpRequest.open('POST', 'index.html');
+        httpRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        httpRequest.send("room=" + tris + "&cmd=" + cmd);
+    }
 
-		function rangeInput() {
-			document.getElementById("NUMERICAL").checked = true
-			percent.value = cmdRange.value
-		}
+    function percentChange(value) {
+        document.getElementById("NUMERICAL").checked = true
+        $("#cmdRange").val(value)
+    }
 
-		function setDefaults() {
-			$("#SALON_OUT").attr("checked", true)
-			$("#MY").attr("checked", true)
-			$("#cmdRange").val(90)
-			$("#percent").val(90)
-			// $("#cmdRange").attr("disabled", true)
-		}
+    function rangeInput() {
+        document.getElementById("NUMERICAL").checked = true
+        percent.value = cmdRange.value
+    }
 
-		window.onload = setDefaults;
+    function initCronCmdsTable() {
+        var httpRequest = new XMLHttpRequest();
+        httpRequest.onreadystatechange = function alertContents() {
+            if (httpRequest.readyState === XMLHttpRequest.DONE) {
+                if (httpRequest.status === 200) {
+                    const table = document.getElementById("cronCmdTableBody")
+                    table.innerHTML = httpRequest.responseText
+                }
+            }
+        }
 
-	</script>
+        httpRequest.open('GET', 'cron_table.html');
+        httpRequest.send();
 
-	<!-- Bootstrap -->
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    }
 
-	</body>
+    function setDefaults() {
+        $("#SALON_OUT").attr("checked", true)
+        $("#MY").attr("checked", true)
+        $("#cmdRange").val(90)
+        $("#percent").val(90)
+        // $("#cmdRange").attr("disabled", true)
+
+        initCronCmdsTable();
+    }
+
+    window.onload = setDefaults;
+
+</script>
+
+<!-- Bootstrap -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
+
+</body>
 </html>
 

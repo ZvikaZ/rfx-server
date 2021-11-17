@@ -3,6 +3,24 @@ const fs = require('fs')
 const qs = require('querystring');
 
 
+function createCronTable() {
+    let table = '<tbody id="cronCmdTableBody">\n'
+    for (let i = 1; i <= 5; i++) {
+        let row = '\t<tr>\n'
+        // row += '\t\t<th scope="row">' + i + '</th>\n'
+
+        // row += '                    <td>כל יום</td>\n' +
+        //     '                    <td>23:00</td>\n' +
+        //     '                    <td>מטבח מזרח</td>\n' +
+        //     '                    <td>למטה</td>'
+
+        row += '\t</tr>\n'
+        table += row
+    }
+    table += '</tbody>'
+    return table
+}
+
 const server = http.createServer((req, res) => {
     res.writeHead(200, {'content-type': 'text/html'})
 
@@ -29,8 +47,10 @@ const server = http.createServer((req, res) => {
             }
         });
     } else {
-        // regular GET - initial reading of the page
-        fs.createReadStream('index.html').pipe(res)
+        if (req.url == "/")
+            fs.createReadStream('index.html').pipe(res)
+        else if (req.url == "/cron_table.html")
+            res.end(createCronTable())
     }
 })
 
