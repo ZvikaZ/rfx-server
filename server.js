@@ -22,7 +22,12 @@ function createCronTable() {
 }
 
 const server = http.createServer((req, res) => {
-    res.writeHead(200, {'content-type': 'text/html'})
+    let reqKind = req.url.split('.')
+    reqKind = reqKind[reqKind.length - 1]
+    let resKind = "html";
+    if (reqKind == "css")
+        resKind = "css"
+    res.writeHead(200, {'content-type': 'text/' + resKind})
 
     if (req.method == "POST") {
         var postdata = "";
@@ -51,6 +56,8 @@ const server = http.createServer((req, res) => {
             fs.createReadStream('index.html').pipe(res)
         else if (req.url == "/cron_table.html")
             res.end(createCronTable())
+        else
+            fs.createReadStream(req.url.slice(1)).pipe(res)
     }
 })
 
