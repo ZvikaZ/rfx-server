@@ -106,11 +106,10 @@
 			var httpRequest = new XMLHttpRequest();
 			httpRequest.onreadystatechange = function alertContents() {
 				if (httpRequest.readyState === XMLHttpRequest.DONE) {
-					if (httpRequest.status === 200) {
-						// alert(httpRequest.responseText);
+					if (httpRequest.status === 200 && httpRequest.responseText == "OK")  {
 						alert("בוצע")
 					} else {
-						// alert("היתה תקלה");
+						alert("היתה תקלה");
 					}
 				}
 			}

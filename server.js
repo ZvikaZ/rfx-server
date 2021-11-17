@@ -22,13 +22,16 @@ const server = http.createServer((req, res) => {
             if (exec.status == 0) {
                 console.log(`stderr: ${exec.stderr.toString()}`);
                 console.log(`stdout: ${exec.stdout.toString()}`);
+                res.end('OK');
             } else {
                 console.log("Failed to run somfy.py")
+                res.end('Failed')
             }
         });
+    } else {
+        // regular GET - initial reading of the page
+        fs.createReadStream('index.html').pipe(res)
     }
-
-    fs.createReadStream('index.html').pipe(res)
 })
 
 server.listen(8080)
