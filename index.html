@@ -128,10 +128,32 @@
     </div>
 
 
+    <div id="messageModal" class="modal fade" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">סטטוס</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p id="message">הודעה</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">אישור</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 
 <script>
+    function showModal(message) {
+        document.getElementById("message").innerText = message
+        var myModal = new bootstrap.Modal(document.getElementById("messageModal"));
+        myModal.show();
+    }
+
     function sendToSomfy() {
         var tris = $('input[name=tris]:checked').val()
         var cmd = $('input[name=cmd]:checked').val()
@@ -142,9 +164,9 @@
         httpRequest.onreadystatechange = function alertContents() {
             if (httpRequest.readyState === XMLHttpRequest.DONE) {
                 if (httpRequest.status === 200 && httpRequest.responseText == "OK") {
-                    alert("בוצע")
+                    showModal("בוצע")
                 } else {
-                    alert("היתה תקלה");
+                    showModal("היתה תקלה");
                 }
             }
         }
