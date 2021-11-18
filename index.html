@@ -65,15 +65,15 @@
                 <legend>פקודה</legend>
                 <div class="form-check">
                     <input class="form-check-input" type="radio" name="cmd" id="UP" value="UP">
-                    <label class="form-check-label" for="cmd1"> למעלה </label>
+                    <label class="form-check-label" for="UP"> למעלה </label>
                 </div>
                 <div class="form-check">
                     <input class="form-check-input" type="radio" name="cmd" id="MY" value="MY">
-                    <label class="form-check-label" for="cmd2"> MY </label>
+                    <label class="form-check-label" for="MY"> MY </label>
                 </div>
                 <div class="form-check">
                     <input class="form-check-input" type="radio" name="cmd" id="DOWN" value="DOWN">
-                    <label class="form-check-label" for="cmd3"> למטה </label>
+                    <label class="form-check-label" for="DOWN"> למטה </label>
                 </div>
                 <div class="form-check">
                     <input class="form-check-input" type="radio" name="cmd" id="NUMERICAL" value="NUMERICAL">
@@ -100,6 +100,8 @@
                 <button type="button" class="btn btn-primary" onclick="sendToSomfy()">בצע פקודה</button>
         </div>
     </div>
+
+    <hr>
 
     <div class="row">
         <p></p>
@@ -197,6 +199,39 @@
 
         httpRequest.open('GET', 'cron_table.html');
         httpRequest.send();
+    }
+
+    function addCronRow() {
+        console.log($("#newCronDay").val())
+        console.log($("#newCronTime").val())
+        console.log($("#newCronRoom").val())
+        console.log($("#newCronPercent").val())
+        console.log($("#newCronComment").val())
+        if ($("#newCronDay").val() == '' | $("#newCronTime").val() == '' | $("#newCronRoom").val() == '' | $("#newCronPercent").val() == '')
+            showModal('חסר מידע: יום/שעה/תריס/פקודה')
+        else {
+            var httpRequest = new XMLHttpRequest();
+            httpRequest.onreadystatechange = function alertContents() {
+                if (httpRequest.readyState === XMLHttpRequest.DONE) {
+                    if (httpRequest.status === 200)
+                        showModal(httpRequest.responseText)
+                    // if (httpRequest.status === 200 && httpRequest.responseText == "OK") {
+                    //     showModal("בוצע")
+                    // } else {
+                    //     showModal("היתה תקלה");
+                    // }
+                }
+            }
+
+            httpRequest.open('POST', 'add_row_to_cron.html');
+            httpRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            httpRequest.send(
+                "day=" + $("#newCronDay").val() +
+                "&time=" + $("#newCronTime").val() +
+                "&room=" + $("#newCronRoom").val() +
+                "&percent=" + $("#newCronPercent").val() +
+                "&comment=" + $("#newCronComment").val());
+        }
 
     }
 
