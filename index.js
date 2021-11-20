@@ -7,7 +7,7 @@ function showModal(message) {
 function showDelModal(message, cb) {
     document.getElementById("delete-confirm").innerText = message
     var myModal = new bootstrap.Modal(document.getElementById("deleteModal"));
-    document.getElementById("del-confirmed").addEventListener("click", cb);
+    document.getElementById("del-confirmed").onclick = cb
     myModal.show();
 }
 
@@ -69,11 +69,11 @@ function initCronCmdsTable() {
 }
 
 function addCronRow() {
-    console.log($("#newCronDay").val())
-    console.log($("#newCronTime").val())
-    console.log($("#newCronRoom").val())
-    console.log($("#newCronPercent").val())
-    console.log($("#newCronComment").val())
+    // console.log($("#newCronDay").val())
+    // console.log($("#newCronTime").val())
+    // console.log($("#newCronRoom").val())
+    // console.log($("#newCronPercent").val())
+    // console.log($("#newCronComment").val())
     if ($("#newCronDay").val() == '' | $("#newCronTime").val() == '' | $("#newCronRoom").val() == '' | $("#newCronPercent").val() == '')
         showModal('חסר מידע: יום/שעה/תריס/פקודה')
     else {
@@ -90,7 +90,6 @@ function addCronRow() {
 
 function deleteRow(row) {
     showDelModal("למחוק את שורה " + row + "?", function () {
-        console.log("deleting " + row)
         ajaxPost('delete_row_from_cron.html', "row=" + row, function (responseText) {
         })
     })
