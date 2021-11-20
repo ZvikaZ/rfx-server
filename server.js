@@ -142,6 +142,42 @@ function createCronTable() {
         if (e.message == "process.getuid is not a function") {
             console.log("crontab not working")
             let table = '<tbody id="cronCmdTableBody">\n' +
+                '<tbody id="cronCmdTableBody">\n' +
+                '\t<tr>\n' +
+                    '\t\t<th scope="row">' +
+                        '<div class="row-container">\n' +
+                            '<div class="text row-text" id="textRow1">1</div>\n' +
+                            '<button type="button" class="btn btn-danger btn-sm row-del-button" id="delButton1" onclick="deleteRow(1)">מחק</button>' +
+                        '</div>\n' +
+                    '</th>'+
+                '\t\t<td>שבת</td>\n' +
+                '\t\t<td>7:10</td>\n' +
+                '\t\t<td>הורים</td>\n' +
+                '\t\t<td>83</td>\n' +
+                '\t\t<td></td>\n' +
+                '\t</tr>\n' +
+                '\t<tr>\n' +
+                    '\t\t<th scope="row">' +
+                        '<div class="row-container">\n' +
+                            '<div class="text row-text" id="textRow2">2</div>\n' +
+                            '<button type="button" class="btn btn-danger btn-sm row-del-button" id="delButton2" onclick="deleteRow(2)">מחק</button>' +
+                        '</div>\n' +
+                    '</th>'+
+                '\t\t<td>שבת</td>\n' +
+                '\t\t<td>7:15</td>\n' +
+                '\t\t<td>הורים</td>\n' +
+                '\t\t<td>למטה</td>\n' +
+                '\t\t<td></td>\n' +
+                '\t</tr>\n' +
+                '\t<tr>\n' +
+                '\t\t<th scope="row">3</th>\n' +
+                '\t\t<td>כל יום</td>\n' +
+                '\t\t<td>9:20</td>\n' +
+                '\t\t<td>מטבח דרום</td>\n' +
+                '\t\t<td>35</td>\n' +
+                '\t\t<td></td>\n' +
+                '\t</tr>\n' +
+                '</tbody>'
                 "</tbody>"
             table += addUsersNewRow();
             table += '</tbody>'

@@ -10,6 +10,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.rtl.min.css">
 
+    <link rel="stylesheet" href="cron_table.css">
+
     <title>Haramaty House Control</title>
 </head>
 <body>
@@ -144,6 +146,25 @@
             </div>
         </div>
     </div>
+
+    <div id="deleteModal" class="modal fade" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">מחיקה</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p id="delete-confirm">בטוח?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal" id="del-confirmed">כן</button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">לא</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 
@@ -151,6 +172,13 @@
     function showModal(message) {
         document.getElementById("message").innerText = message
         var myModal = new bootstrap.Modal(document.getElementById("messageModal"));
+        myModal.show();
+    }
+
+    function showDelModal(message, cb) {
+        document.getElementById("delete-confirm").innerText = message
+        var myModal = new bootstrap.Modal(document.getElementById("deleteModal"));
+        document.getElementById("del-confirmed").addEventListener("click", cb);
         myModal.show();
     }
 
@@ -232,7 +260,12 @@
                 "&percent=" + $("#newCronPercent").val() +
                 "&comment=" + $("#newCronComment").val());
         }
+    }
 
+    function deleteRow(row) {
+        showDelModal("למחוק את שורה " + row + "?", function () {
+            console.log("deleting " + row)
+        })
     }
 
     function setDefaults() {
