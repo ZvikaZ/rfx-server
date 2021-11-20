@@ -2,9 +2,8 @@ const http = require('http')
 const fs = require('fs')
 const qs = require('querystring');
 
-let cronTable = ""
 
-function createCronTable() {
+function createCronTable(cb) {
     function addUsersNewRow() {
         let result = "<tr>"
         result += '<td><button type="button" class="btn btn-primary btn-sm " onclick="addCronRow()"><small>הוסף</small></button></td>'
@@ -136,7 +135,7 @@ function createCronTable() {
             }
             table += addUsersNewRow();
             table += '</tbody>'
-            cronTable = table
+            cb(table)
         })
     } catch (e) {
         if (e.message == "process.getuid is not a function") {
@@ -181,7 +180,7 @@ function createCronTable() {
                 "</tbody>"
             table += addUsersNewRow();
             table += '</tbody>'
-            cronTable = table
+            cb(table)
         } else
             console.log(e)
     }
@@ -190,7 +189,6 @@ function createCronTable() {
 }
 
 const server = http.createServer((req, res) => {
-    createCronTable()  //TODO should be called only when needed, with some promise mechanism, or whatever JS syncing
     let reqKind = req.url.split('.')
     reqKind = reqKind[reqKind.length - 1]
     let resKind = "html";
@@ -233,7 +231,9 @@ const server = http.createServer((req, res) => {
         if (req.url == "/") {
             fs.createReadStream('index.html').pipe(res)
         } else if (req.url == "/cron_table.html") {
-            res.end(cronTable)
+            createCronTable(function (cronTable) {
+                res.end(cronTable)
+            })
         } else {
             fs.createReadStream(req.url.slice(1)).pipe(res)
         }
