@@ -2,6 +2,8 @@ const http = require('http')
 const fs = require('fs')
 const qs = require('querystring');
 
+const command = '/home/zvika/RFXCMD/somfy.py'
+
 
 function createCronTable(cb) {
     function addUsersNewRow() {
@@ -220,8 +222,30 @@ const server = http.createServer((req, res) => {
             } else if (req.url == "/add_row_to_cron.html") {
                 console.log("add: ")
                 console.log(paramstring)
-                //TODO: cron this
-                res.end("זה עדין לא עובד")
+				try {
+					require('crontab').load(function (err, crontab) {
+						var job = crontab.create(command + " " + paramstring.room + " " + paramstring.percent, null, paramstring.comment);
+						if (job == null) {
+							console.log('failed to create job');
+							res.end('Failed')
+						} else {
+							job.dow().on(paramstring.day);
+							job.hour().at(paramstring.time.split(':')[0]);
+							job.minute().at(paramstring.time.split(':')[1]);
+							crontab.save(function(err, crontab) {
+								console.log(err)
+								res.end(err)
+							});
+						}
+					})
+				} catch (e) {
+					if (e.message == "process.getuid is not a function") {
+						console.log("add: crontab not working")
+					} else {
+						console.log(e)
+					}
+					res.end(err)
+				}
             } else if (req.url == "/delete_row_from_cron.html") {
                 console.log("del: ")
                 console.log(paramstring)

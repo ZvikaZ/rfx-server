@@ -84,6 +84,10 @@ function addCronRow() {
             "&percent=" + $("#newCronPercent").val() +
             "&comment=" + $("#newCronComment").val(),
             function (responseText) {
+				console.log(responseText)
+				if (responseText != '')
+					showModal("היתקה תקלה")
+				initCronCmdsTable();
             })
     }
 }
