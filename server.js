@@ -31,7 +31,7 @@ function createCronTable(cb) {
             '  <option value="PUBLIC">(קבוצה) סלון מטבח</option>\n' +
             '  <option value="PUBLIC_SMALL">(קבוצה) חלונות סלון מטבח</option>\n' +
             '</select></td>'
-        result += '<td><input type="number" id="newCronPercent" class="form-control form-control-sm" " min=0 max=100 placeholder="אחוזים"></td>'
+        result += '<td><input type="number" id="newCronPercent" class="form-control form-control-sm" " min=0 max=100 placeholder="אחוז"></td>'
         result += '<td><input type="text" id="newCronComment" class="form-control form-control-sm" " placeholder="הערה"></td>'
         result += "</tr>"
         return result
