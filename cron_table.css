@@ -1,0 +1,11 @@
+.row-del-button {
+    display: none;
+}
+
+.row-container:hover .row-del-button {
+    display: block;
+}
+
+.row-container:hover .row-text {
+    display: none;
+}
