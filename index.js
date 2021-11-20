@@ -11,26 +11,36 @@ function showDelModal(message, cb) {
     myModal.show();
 }
 
-function sendToSomfy() {
-    var tris = $('input[name=tris]:checked').val()
-    var cmd = $('input[name=cmd]:checked').val()
-    if (cmd == 'NUMERICAL')
-        cmd = $("#percent").val()
-
+function ajaxPost(url, message, successCb) {
     var httpRequest = new XMLHttpRequest();
     httpRequest.onreadystatechange = function alertContents() {
         if (httpRequest.readyState === XMLHttpRequest.DONE) {
-            if (httpRequest.status === 200 && httpRequest.responseText == "OK") {
-                showModal("בוצע")
+            if (httpRequest.status === 200) {
+                successCb(httpRequest.responseText)
             } else {
                 showModal("היתה תקלה");
             }
         }
     }
 
-    httpRequest.open('POST', 'index.html');
+    httpRequest.open('POST', url);
     httpRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    httpRequest.send("room=" + tris + "&cmd=" + cmd);
+    httpRequest.send(message);
+}
+
+function sendToSomfy() {
+    var tris = $('input[name=tris]:checked').val()
+    var cmd = $('input[name=cmd]:checked').val()
+    if (cmd == 'NUMERICAL')
+        cmd = $("#percent").val()
+    ajaxPost('index.html', "room=" + tris + "&cmd=" + cmd, function (responseText) {
+        // success callback
+        if (responseText == "OK") {
+            showModal("בוצע")
+        } else {
+            showModal("היתה תקלה");
+        }
+    });
 }
 
 function percentChange(value) {
@@ -67,33 +77,22 @@ function addCronRow() {
     if ($("#newCronDay").val() == '' | $("#newCronTime").val() == '' | $("#newCronRoom").val() == '' | $("#newCronPercent").val() == '')
         showModal('חסר מידע: יום/שעה/תריס/פקודה')
     else {
-        var httpRequest = new XMLHttpRequest();
-        httpRequest.onreadystatechange = function alertContents() {
-            if (httpRequest.readyState === XMLHttpRequest.DONE) {
-                if (httpRequest.status === 200)
-                    showModal(httpRequest.responseText)
-                // if (httpRequest.status === 200 && httpRequest.responseText == "OK") {
-                //     showModal("בוצע")
-                // } else {
-                //     showModal("היתה תקלה");
-                // }
-            }
-        }
-
-        httpRequest.open('POST', 'add_row_to_cron.html');
-        httpRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        httpRequest.send(
+        ajaxPost('add_row_to_cron.html',
             "day=" + $("#newCronDay").val() +
             "&time=" + $("#newCronTime").val() +
             "&room=" + $("#newCronRoom").val() +
             "&percent=" + $("#newCronPercent").val() +
-            "&comment=" + $("#newCronComment").val());
+            "&comment=" + $("#newCronComment").val(),
+            function (responseText) {
+            })
     }
 }
 
 function deleteRow(row) {
     showDelModal("למחוק את שורה " + row + "?", function () {
         console.log("deleting " + row)
+        ajaxPost('delete_row_from_cron.html', "row=" + row, function (responseText) {
+        })
     })
 }
 

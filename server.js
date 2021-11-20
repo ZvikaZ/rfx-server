@@ -159,7 +159,7 @@ function createCronTable(cb) {
                 '\t\t<td>7:10</td>\n' +
                 '\t\t<td>הורים</td>\n' +
                 '\t\t<td>83</td>\n' +
-                '\t\t<td></td>\n' +
+                '\t\t<td>מזויף!</td>\n' +
                 '\t</tr>\n' +
                 '\t<tr>\n' +
                     '\t\t<th scope="row">' +
@@ -172,17 +172,9 @@ function createCronTable(cb) {
                 '\t\t<td>7:15</td>\n' +
                 '\t\t<td>הורים</td>\n' +
                 '\t\t<td>למטה</td>\n' +
-                '\t\t<td></td>\n' +
+                '\t\t<td>מזויף!</td>\n' +
                 '\t</tr>\n' +
                 '\t<tr>\n' +
-                '\t\t<th scope="row">3</th>\n' +
-                '\t\t<td>כל יום</td>\n' +
-                '\t\t<td>9:20</td>\n' +
-                '\t\t<td>מטבח דרום</td>\n' +
-                '\t\t<td>35</td>\n' +
-                '\t\t<td></td>\n' +
-                '\t</tr>\n' +
-                '</tbody>'
                 "</tbody>"
             table += addUsersNewRow();
             table += '</tbody>'
@@ -226,11 +218,14 @@ const server = http.createServer((req, res) => {
                     res.end('Failed')
                 }
             } else if (req.url == "/add_row_to_cron.html") {
+                console.log("add: ")
                 console.log(paramstring)
                 //TODO: cron this
-                //TODO: report back success or failure
                 res.end("זה עדין לא עובד")
-                //TODO support deletion
+            } else if (req.url == "/delete_row_from_cron.html") {
+                console.log("del: ")
+                console.log(paramstring)
+                //TODO: cron this
             }
         });
     } else {
