@@ -226,6 +226,10 @@ const server = http.createServer((req, res) => {
                 console.log("del: ")
                 console.log(paramstring)
                 //TODO: cron this
+                res.end("זה עדין לא עובד")
+            } else {
+                console.log("POST: unknown URL!")
+                res.end()
             }
         });
     } else {
