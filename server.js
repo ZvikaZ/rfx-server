@@ -8,7 +8,7 @@ function createCronTable(cb) {
         let result = "<tr>"
         result += '<td><button type="button" class="btn btn-primary btn-sm " onclick="addCronRow()"><small>הוסף</small></button></td>'
         result += '<td><select id="newCronDay" class="custom-select form-control form-control-sm">\n' +
-            '  <option value="" selected>ביום...</option>\n' +
+            '  <option value="" selected>יום...</option>\n' +
             '  <option value="*">כל יום</option>\n' +
             '  <option value="0">ראשון</option>\n' +
             '  <option value="1">שני</option>\n' +
@@ -122,7 +122,13 @@ function createCronTable(cb) {
                     }
 
                     let row = '\t<tr>\n'
-                    row += '\t\t<th scope="row">' + i + '</th>\n'
+                    row += 
+						'\t\t<th scope="row">' +
+							'<div class="row-container">\n' +
+								'<div class="text row-text" id="textRow1">' + i + '</div>\n' +
+								'<button type="button" class="btn btn-danger btn-sm row-del-button" id="delButton1" onclick="deleteRow(' + i +')">מחק</button>' +
+							'</div>\n' +
+						'</th>'
                     row += '\t\t<td>' + day + '</td>\n'
                     row += '\t\t<td>' + job.hour() + ":" + job.minute() + '</td>\n'
                     row += '\t\t<td>' + room + '</td>\n'
