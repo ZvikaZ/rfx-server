@@ -29,12 +29,14 @@ function ajaxPost(url, message, successCb) {
 }
 
 function sendToSomfy() {
+    document.getElementById("exec-button-spinner").hidden = false
     var tris = $('input[name=tris]:checked').val()
     var cmd = $('input[name=cmd]:checked').val()
     if (cmd == 'NUMERICAL')
         cmd = $("#percent").val()
     ajaxPost('index.html', "room=" + tris + "&cmd=" + cmd, function (responseText) {
         // success callback
+        document.getElementById("exec-button-spinner").hidden = true
         if (responseText == "OK") {
             showModal("בוצע")
         } else {
