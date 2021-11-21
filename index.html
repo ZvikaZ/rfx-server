@@ -132,6 +132,75 @@
                     <tbody id="cronCmdTableBody">
                     </tbody>
                 </table>
+                <div class="row">
+                    <div class="col">
+                        <button type="button" class="btn btn-primary"
+                                onclick='new bootstrap.Modal(document.getElementById("addRowModal")).show()'>
+                            הוסף שורה
+                        </button>
+<button type="button" class="btn btn-outline-danger" disabled>כדי למחוק, רחף או הקלק על מספר השורה</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="addRowModal" class="modal fade" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">סטטוס</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">יום</span>
+                        <select id="newCronDay" class="custom-select form-control form-control-sm">
+                            <option value="*">כל יום</option>
+                            <option value="0">ראשון</option>
+                            <option value="1">שני</option>
+                            <option value="2">שלישי</option>
+                            <option value="3">רביעי</option>
+                            <option value="4">חמישי</option>
+                            <option value="5">שישי</option>
+                            <option value="6">שבת</option>
+                        </select>
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">בשעה</span>
+                        <input type="time" id="newCronTime" class="form-control form-control-sm">
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">תריס</span>
+                        <select id="newCronRoom" class="custom-select form-control form-control-sm">
+                            <option value="SALON_OUT">סלון למרפסת</option>
+                            <option value="SALON_SMALL">סלון חלון</option>
+                            <option value="KITCHEN1">מטבח דרום</option>
+                            <option value="KITCHEN2">מטבח מזרח</option>
+                            <option value="PARENTS">הורים</option>
+                            <option value="UP_OUT">מרפסת עלינה</option>
+                            <option value="ALL">(קבוצה) הכל</option>
+                            <option value="PUBLIC">(קבוצה) סלון מטבח</option>
+                            <option value="PUBLIC_SMALL">(קבוצה) חלונות סלון מטבח</option>
+                        </select>
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">אחוז</span>
+                        <input type="number" id="newCronPercent" class="form-control form-control-sm" min=0 max=100
+                               placeholder="%">
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">הערה</span>
+                        <input type="text" id="newCronComment" class="form-control form-control-sm"
+                               placeholder="(אופציונלי)">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">בטל</button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="addCronRow()">הוסף
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -165,7 +234,8 @@
                     <p id="delete-confirm">בטוח?</p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal" id="del-confirmed">כן</button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal" id="del-confirmed">כן
+                    </button>
                     <button type="button" class="btn btn-primary btn-lg" data-bs-dismiss="modal">לא</button>
                 </div>
             </div>

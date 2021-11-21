@@ -1,3 +1,9 @@
+// TODOs:
+// Write readme
+// Use config instead of hard wired html and js names
+// Allow sunrise and sunset plus minus delta
+// Allow up or down for k seconds
+
 const http = require('http')
 const fs = require('fs')
 const qs = require('querystring');
@@ -8,39 +14,6 @@ const command = '/home/zvika/RFXCMD/somfy.py'
 
 
 function createCronTable(cb) {
-    function addUsersNewRow() {
-        let result = "<tr>"
-        result += '<td><button type="button" class="btn btn-primary btn-sm " onclick="addCronRow()"><small>הוסף</small></button></td>'
-        result += '<td><select id="newCronDay" class="custom-select form-control form-control-sm">\n' +
-            '  <option value="" selected>יום...</option>\n' +
-            '  <option value="*">כל יום</option>\n' +
-            '  <option value="0">ראשון</option>\n' +
-            '  <option value="1">שני</option>\n' +
-            '  <option value="2">שלישי</option>\n' +
-            '  <option value="3">רביעי</option>\n' +
-            '  <option value="4">חמישי</option>\n' +
-            '  <option value="5">שישי</option>\n' +
-            '  <option value="6">שבת</option>\n' +
-            '</select></td>'
-        result += '<td><input type="time" id="newCronTime" class="form-control form-control-sm" "</td>'
-        result += '<td><select id="newCronRoom" class="custom-select form-control form-control-sm">\n' +
-            '  <option value="" selected>תריס...</option>\n' +
-            '  <option value="SALON_OUT">סלון למרפסת</option>\n' +
-            '  <option value="SALON_SMALL">סלון חלון</option>\n' +
-            '  <option value="KITCHEN1">מטבח דרום</option>\n' +
-            '  <option value="KITCHEN2">מטבח מזרח</option>\n' +
-            '  <option value="PARENTS">הורים</option>\n' +
-            '  <option value="UP_OUT">מרפסת עלינה</option>\n' +
-            '  <option value="ALL">(קבוצה) הכל</option>\n' +
-            '  <option value="PUBLIC">(קבוצה) סלון מטבח</option>\n' +
-            '  <option value="PUBLIC_SMALL">(קבוצה) חלונות סלון מטבח</option>\n' +
-            '</select></td>'
-        result += '<td><input type="number" id="newCronPercent" class="form-control form-control-sm" " min=0 max=100 placeholder="אחוז"></td>'
-        result += '<td><input type="text" id="newCronComment" class="form-control form-control-sm" " placeholder="הערה"></td>'
-        result += "</tr>"
-        return result
-    }
-
     try {
         require('crontab').load(function (err, crontab) {
             var jobs = crontab.jobs({command: command});
@@ -165,7 +138,6 @@ function createCronTable(cb) {
                 i++
                 table += row.row.replace(/RUNNING-INDEX-I/g, i)
             }
-            table += addUsersNewRow();
             table += '</tbody>'
             cb(table)
         })
@@ -202,7 +174,6 @@ function createCronTable(cb) {
                 '\t</tr>\n' +
                 '\t<tr>\n' +
                 "</tbody>"
-            table += addUsersNewRow();
             table += '</tbody>'
             cb(table)
         } else
@@ -233,7 +204,7 @@ const server = http.createServer((req, res) => {
             if (req.url == "/index.html") {
                 console.log(paramstring.room + " " + paramstring.cmd)
                 const {spawnSync} = require('child_process');
-                const exec = spawnSync('/home/zvika/RFXCMD/somfy.py', [paramstring.room, paramstring.cmd]);
+                const exec = spawnSync(command, [paramstring.room, paramstring.cmd]);
 
                 if (exec.status == 0) {
                     console.log(`stderr: ${exec.stderr.toString()}`);
