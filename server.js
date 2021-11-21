@@ -1,7 +1,6 @@
 // TODOs:
 // Write readme (mention https://github.com/mfreeborn/heliocron)
 // Use config instead of hard wired html and js names
-// Allow sunrise and sunset plus minus delta
 // Allow up or down for k seconds
 
 const http = require('http')
@@ -16,11 +15,13 @@ const commandBase = '/home/zvika/RFXCMD/somfy.py'
 function createCronTable(cb) {
     try {
         require('crontab').load(function (err, crontab) {
-            var jobs = crontab.jobs({command: commandBase});
+            let jobs = crontab.jobs({command: commandBase});
             let rows = []
             for (let job of jobs) {
                 if (job.isValid()) {
                     exec = job.command().split(' ')
+					if (exec[0] == 'heliocron')
+						exec.splice(0, 7)    // delete first 7 items
                     let room
                     switch (exec[1]) {
                         case 'UP_OUT':
@@ -95,10 +96,29 @@ function createCronTable(cb) {
                         default:
                             day = job.dow().toString()
                     }
+					let time
+					if (!job.command().toString().includes('heliocron')) {
+						// const time
+						time = job.hour().toString() + ":" + job.minute().toString().padStart(2, '0')
+					} else {
+						let heliocron_params = job.command().toString().split(' ')
+						let evnt = heliocron_params[3]
+						if (evnt == 'sunrise')
+							time = 'ז'
+						else if (evnt == 'sunset')
+							time = 'ש'
+						else 
+							console.log('unexpected heliocron event: ' + evnt)
+						let minutes = heliocron_params[5].split(':')[0]
+						if (minutes.charAt(0) == '-')
+							time += '-' + minutes.substring(1)
+						else
+							time += '+' + minutes
+					}
 
-                    var metadata = qs.parse(job.comment())
-                    var comment = 'comment' in metadata ? metadata.comment : ''
-                    var uuid = 'uuid' in metadata ? metadata.uuid : 'null'
+                    let metadata = qs.parse(job.comment())
+                    let comment = 'comment' in metadata ? metadata.comment : ''
+                    let uuid = 'uuid' in metadata ? metadata.uuid : 'null'
                     let row = '\t<tr>\n'
                     row +=
                         '\t\t<th scope="row">' +
@@ -108,7 +128,7 @@ function createCronTable(cb) {
                         '</div>\n' +
                         '</th>'
                     row += '\t\t<td>' + day + '</td>\n'
-                    row += '\t\t<td>' + job.hour() + ":" + job.minute() + '</td>\n'
+                    row += '\t\t<td>' + time + '</td>\n'
                     row += '\t\t<td>' + room + '</td>\n'
                     row += '\t\t<td>' + cmd + '</td>\n'
                     row += '\t\t<td>' + comment + '</td>\n'
@@ -192,14 +212,14 @@ const server = http.createServer((req, res) => {
     res.writeHead(200, {'content-type': 'text/' + resKind})
 
     if (req.method == "POST") {
-        var postdata = "";
+        let postdata = "";
         req.on('data', function (postdataChunk) {
             postdata += postdataChunk;
         });
 
         req.on('end', function () {
             console.log(req.url)
-            var paramstring = qs.parse(postdata)
+            let paramstring = qs.parse(postdata)
 
             if (req.url == "/index.html") {
                 console.log(paramstring.room + " " + paramstring.cmd)
@@ -230,7 +250,7 @@ const server = http.createServer((req, res) => {
                 console.log(command)
                 try {
                     require('crontab').load(function (err, crontab) {
-                        var job = crontab.create(command, null, "uuid=" + uuidv4() + "&comment=" + paramstring.comment);
+                        let job = crontab.create(command, null, "uuid=" + uuidv4() + "&comment=" + paramstring.comment);
                         if (job == null) {
                             console.log('failed to create job');
                             res.end('Failed')
