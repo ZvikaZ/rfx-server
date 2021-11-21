@@ -169,8 +169,53 @@
                         </select>
                     </div>
                     <div class="input-group mb-3">
-                        <span class="input-group-text">בשעה</span>
-                        <input type="time" id="newCronTime" class="form-control form-control-sm">
+                        <span class="input-group-text">מתי</span>
+                        <div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="addRowTimeKind"
+                                       onchange="addRowRadio('const')"
+                                       id="addRowConstTimeRadio" value="constTime" checked>
+                                <label class="form-check-label" for="addRowConstTimeRadio">
+                                    בשעה קבועה
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="addRowTimeKind"
+                                       onchange="addRowRadio('relative')"
+                                       id="addRowBeforeSunriseRadio" value="beforeSunrise">
+                                <label class="form-check-label" for="addRowBeforeSunriseRadio">
+                                    לפני זריחה
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="addRowTimeKind"
+                                       onchange="addRowRadio('relative')"
+                                       id="addRowAfterSunriseRadio" value="afterSunrise">
+                                <label class="form-check-label" for="addRowAfterSunriseRadio">
+                                    אחרי זריחה
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="addRowTimeKind"
+                                       onchange="addRowRadio('relative')"
+                                       id="addRowBeforeSunsetRadio" value="beforeSunset">
+                                <label class="form-check-label" for="addRowBeforeSunsetRadio">
+                                    לפני שקיעה
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="addRowTimeKind"
+                                       onchange="addRowRadio('relative')"
+                                       id="addRowAfterSunsetRadio" value="afterSunset">
+                                <label class="form-check-label" for="addRowAfterSunsetRadio">
+                                    אחרי שקיעה
+                                </label>
+                            </div>
+                        </div>
+                        <input type="time" id="newCronConstTime" class="form-control form-control-sm">
+                        <input type="number" id="newCronRelativeTime" class="form-control form-control-sm" min=0 max=240
+                               placeholder="דקות" hidden>
+
                     </div>
                     <div class="input-group mb-3">
                         <span class="input-group-text">תריס</span>

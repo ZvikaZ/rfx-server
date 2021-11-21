@@ -70,18 +70,37 @@ function initCronCmdsTable() {
     httpRequest.send();
 }
 
+function addRowRadio(sel) {
+    if (sel == 'const') {
+        document.getElementById("newCronConstTime").hidden = false
+        document.getElementById("newCronRelativeTime").hidden = true
+    } else {
+        document.getElementById("newCronConstTime").hidden = true
+        document.getElementById("newCronRelativeTime").hidden = false
+    }
+}
+
 function addCronRow() {
-    // console.log($("#newCronDay").val())
-    // console.log($("#newCronTime").val())
-    // console.log($("#newCronRoom").val())
-    // console.log($("#newCronPercent").val())
-    // console.log($("#newCronComment").val())
-    if ($("#newCronDay").val() == '' | $("#newCronTime").val() == '' | $("#newCronRoom").val() == '' | $("#newCronPercent").val() == '')
-        showModal('חסר מידע: יום/שעה/תריס/פקודה')
+    let time
+    let timeKind = $('input[name=addRowTimeKind]:checked').val()
+    if (timeKind == 'constTime')
+        time = $("#newCronConstTime").val()
+    else
+        time = $("#newCronRelativeTime").val()
+
+    if ($("#newCronDay").val() === '')
+        showModal('חסר מידע: יום')
+    else if (time === '')
+        showModal('חסר מידע: שעה')
+    else if ($("#newCronRoom").val() === '')
+        showModal('חסר מידע: תריס')
+    else if ($("#newCronPercent").val() === '')
+        showModal('חסר מידע: פקודה')
     else {
         ajaxPost('add_row_to_cron.html',
             "day=" + $("#newCronDay").val() +
-            "&time=" + $("#newCronTime").val() +
+            "&timeKind=" + timeKind +
+            "&time=" + time +
             "&room=" + $("#newCronRoom").val() +
             "&percent=" + $("#newCronPercent").val() +
             "&comment=" + $("#newCronComment").val(),

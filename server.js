@@ -1,5 +1,5 @@
 // TODOs:
-// Write readme
+// Write readme (mention https://github.com/mfreeborn/heliocron)
 // Use config instead of hard wired html and js names
 // Allow sunrise and sunset plus minus delta
 // Allow up or down for k seconds
@@ -10,13 +10,13 @@ const qs = require('querystring');
 const {v4: uuidv4} = require('uuid');
 
 
-const command = '/home/zvika/RFXCMD/somfy.py'
+const commandBase = '/home/zvika/RFXCMD/somfy.py'
 
 
 function createCronTable(cb) {
     try {
         require('crontab').load(function (err, crontab) {
-            var jobs = crontab.jobs({command: command});
+            var jobs = crontab.jobs({command: commandBase});
             let rows = []
             for (let job of jobs) {
                 if (job.isValid()) {
@@ -204,7 +204,7 @@ const server = http.createServer((req, res) => {
             if (req.url == "/index.html") {
                 console.log(paramstring.room + " " + paramstring.cmd)
                 const {spawnSync} = require('child_process');
-                const exec = spawnSync(command, [paramstring.room, paramstring.cmd]);
+                const exec = spawnSync(commandBase, [paramstring.room, paramstring.cmd]);
 
                 if (exec.status == 0) {
                     console.log(`stderr: ${exec.stderr.toString()}`);
@@ -217,16 +217,38 @@ const server = http.createServer((req, res) => {
             } else if (req.url == "/add_row_to_cron.html") {
                 console.log("add: ")
                 console.log(paramstring)
+                let command = commandBase + " " + paramstring.room + " " + paramstring.percent
+                if (paramstring.timeKind != 'constTime') {
+                    let event = paramstring.timeKind.includes('Sunrise') ?
+                        'sunrise' :
+                        'sunset'
+                    let offset = paramstring.time + ':0'
+                    if (paramstring.timeKind.includes('before'))
+                        offset = '-' + offset
+                    command = 'heliocron wait --event ' + event + ' --offset ' + offset + ' && ' + command
+                }
+                console.log(command)
                 try {
                     require('crontab').load(function (err, crontab) {
-                        var job = crontab.create(command + " " + paramstring.room + " " + paramstring.percent, null, "uuid=" + uuidv4() + "&comment=" + paramstring.comment);
+                        var job = crontab.create(command, null, "uuid=" + uuidv4() + "&comment=" + paramstring.comment);
                         if (job == null) {
                             console.log('failed to create job');
                             res.end('Failed')
                         } else {
                             job.dow().on(paramstring.day);
-                            job.hour().at(paramstring.time.split(':')[0]);
-                            job.minute().at(paramstring.time.split(':')[1]);
+                            if (paramstring.timeKind == 'constTime') {
+                                console.log('constTime')
+                                job.hour().at(paramstring.time.split(':')[0]);
+                                job.minute().at(paramstring.time.split(':')[1]);
+                            } else if (paramstring.timeKind.includes('Sunrise')) {
+                                job.hour().at(2);
+                                job.minute().at(0);
+                            } else if (paramstring.timeKind.includes('Sunset')) {
+                                job.hour().at(13);
+                                job.minute().at(0);
+                            } else {
+                                console.log("Unexpected timeKind: " + paramstring.timeKind)
+                            }
                             crontab.save(function (err, crontab) {
                                 console.log(err)
                                 res.end(err)
