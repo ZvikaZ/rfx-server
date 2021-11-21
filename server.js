@@ -20,8 +20,8 @@ function createCronTable(cb) {
             for (let job of jobs) {
                 if (job.isValid()) {
                     exec = job.command().split(' ')
-					if (exec[0] == 'heliocron')
-						exec.splice(0, 7)    // delete first 7 items
+                    if (exec[0] == 'heliocron')
+                        exec.splice(0, 7)    // delete first 7 items
                     let room
                     switch (exec[1]) {
                         case 'UP_OUT':
@@ -96,25 +96,25 @@ function createCronTable(cb) {
                         default:
                             day = job.dow().toString()
                     }
-					let time
-					if (!job.command().toString().includes('heliocron')) {
-						// const time
-						time = job.hour().toString() + ":" + job.minute().toString().padStart(2, '0')
-					} else {
-						let heliocron_params = job.command().toString().split(' ')
-						let evnt = heliocron_params[3]
-						if (evnt == 'sunrise')
-							time = 'ז'
-						else if (evnt == 'sunset')
-							time = 'ש'
-						else 
-							console.log('unexpected heliocron event: ' + evnt)
-						let minutes = heliocron_params[5].split(':')[0]
-						if (minutes.charAt(0) == '-')
-							time += '-' + minutes.substring(1)
-						else
-							time += '+' + minutes
-					}
+                    let time
+                    if (!job.command().toString().includes('heliocron')) {
+                        // const time
+                        time = job.hour().toString() + ":" + job.minute().toString().padStart(2, '0')
+                    } else {
+                        let heliocron_params = job.command().toString().split(' ')
+                        let evnt = heliocron_params[3]
+                        if (evnt == 'sunrise')
+                            time = 'ז'
+                        else if (evnt == 'sunset')
+                            time = 'ש'
+                        else
+                            console.log('unexpected heliocron event: ' + evnt)
+                        let minutes = heliocron_params[5].split(':')[0]
+                        if (minutes.charAt(0) == '-')
+                            time += '-' + minutes.substring(1)
+                        else
+                            time += '+' + minutes
+                    }
 
                     let metadata = qs.parse(job.comment())
                     let comment = 'comment' in metadata ? metadata.comment : ''
