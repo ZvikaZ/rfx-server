@@ -151,8 +151,8 @@ function createCronTable(cb) {
             rows.sort((a, b) => {
                 if (a.day < b.day)
                     return -1
-				else if (a.day > b.day)
-					return 1
+                else if (a.day > b.day)
+                    return 1
                 else if (a.hour - b.hour != 0)
                     return a.hour - b.hour
                 else
@@ -160,9 +160,9 @@ function createCronTable(cb) {
             })
 
             let table = '<tbody id="cronCmdTableBody">\n'
-			let i = 0
+            let i = 0
             for (let row of rows) {
-				i++
+                i++
                 table += row.row.replace(/RUNNING-INDEX-I/g, i)
             }
             table += addUsersNewRow();
