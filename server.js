@@ -45,10 +45,8 @@ function createCronTable(cb) {
         require('crontab').load(function (err, crontab) {
             var jobs = crontab.jobs({command: command});
             let rows = []
-            let i = 0
             for (let job of jobs) {
                 if (job.isValid()) {
-                    i++
                     exec = job.command().split(' ')
                     let room
                     switch (exec[1]) {
@@ -132,8 +130,8 @@ function createCronTable(cb) {
                     row +=
                         '\t\t<th scope="row">' +
                         '<div class="row-container">\n' +
-                        '<div class="text row-text" id="textRow1">' + i + '</div>\n' +
-                        '<button type="button" class="btn btn-danger btn-sm row-del-button" id="delButton1" onclick="deleteRow(' + i + ", '" + uuid + "'" + ')">מחק</button>' +
+                        '<div class="text row-text" id="textRow1">RUNNING-INDEX-I</div>\n' +
+                        '<button type="button" class="btn btn-danger btn-sm row-del-button" id="delButton1" onclick="deleteRow(RUNNING-INDEX-I' + ", '" + uuid + "'" + ')">מחק</button>' +
                         '</div>\n' +
                         '</th>'
                     row += '\t\t<td>' + day + '</td>\n'
@@ -143,16 +141,18 @@ function createCronTable(cb) {
                     row += '\t\t<td>' + comment + '</td>\n'
                     row += '\t</tr>\n'
                     rows.push({
-                        day: day,
-                        hour: job.hour(),
-                        minute: job.minute(),
+                        day: job.dow().toString(),
+                        hour: job.hour().toString(),
+                        minute: job.minute().toString(),
                         row: row
                     })
                 }
             }
             rows.sort((a, b) => {
-                if (a.day - b.day != 0)
-                    return a.day - b.day
+                if (a.day < b.day)
+                    return -1
+				else if (a.day > b.day)
+					return 1
                 else if (a.hour - b.hour != 0)
                     return a.hour - b.hour
                 else
@@ -160,8 +160,10 @@ function createCronTable(cb) {
             })
 
             let table = '<tbody id="cronCmdTableBody">\n'
+			let i = 0
             for (let row of rows) {
-                table += row
+				i++
+                table += row.row.replace(/RUNNING-INDEX-I/g, i)
             }
             table += addUsersNewRow();
             table += '</tbody>'
