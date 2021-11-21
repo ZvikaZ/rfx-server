@@ -43,8 +43,8 @@ function createCronTable(cb) {
 
     try {
         require('crontab').load(function (err, crontab) {
-            let table = '<tbody id="cronCmdTableBody">\n'
             var jobs = crontab.jobs({command: command});
+            let rows = []
             let i = 0
             for (let job of jobs) {
                 if (job.isValid()) {
@@ -142,8 +142,26 @@ function createCronTable(cb) {
                     row += '\t\t<td>' + cmd + '</td>\n'
                     row += '\t\t<td>' + comment + '</td>\n'
                     row += '\t</tr>\n'
-                    table += row
+                    rows.push({
+                        day: day,
+                        hour: job.hour(),
+                        minute: job.minute(),
+                        row: row
+                    })
                 }
+            }
+            rows.sort((a, b) => {
+                if (a.day - b.day != 0)
+                    return a.day - b.day
+                else if (a.hour - b.hour != 0)
+                    return a.hour - b.hour
+                else
+                    return a.minute - b.minute
+            })
+
+            let table = '<tbody id="cronCmdTableBody">\n'
+            for (let row of rows) {
+                table += row
             }
             table += addUsersNewRow();
             table += '</tbody>'
