@@ -1,6 +1,8 @@
 const http = require('http')
 const fs = require('fs')
 const qs = require('querystring');
+const { v4: uuidv4 } = require('uuid');
+
 
 const command = '/home/zvika/RFXCMD/somfy.py'
 
@@ -42,7 +44,7 @@ function createCronTable(cb) {
     try {
         require('crontab').load(function (err, crontab) {
             let table = '<tbody id="cronCmdTableBody">\n'
-            var jobs = crontab.jobs({command: '/home/zvika/RFXCMD/somfy.py'});
+            var jobs = crontab.jobs({command: command});
             let i = 0
             for (let job of jobs) {
                 if (job.isValid()) {
@@ -123,20 +125,22 @@ function createCronTable(cb) {
                             day = job.dow().toString()
                     }
 
+					var metadata = qs.parse(job.comment())
+					var comment = 'comment' in metadata ? metadata.comment : ''
+					var uuid = 'uuid' in metadata ? metadata.uuid : 'null'
                     let row = '\t<tr>\n'
                     row += 
 						'\t\t<th scope="row">' +
 							'<div class="row-container">\n' +
 								'<div class="text row-text" id="textRow1">' + i + '</div>\n' +
-								'<button type="button" class="btn btn-danger btn-sm row-del-button" id="delButton1" onclick="deleteRow(' + i +')">מחק</button>' +
+								'<button type="button" class="btn btn-danger btn-sm row-del-button" id="delButton1" onclick="deleteRow(' + i + ", '" + uuid + "'" + ')">מחק</button>' +
 							'</div>\n' +
 						'</th>'
                     row += '\t\t<td>' + day + '</td>\n'
                     row += '\t\t<td>' + job.hour() + ":" + job.minute() + '</td>\n'
                     row += '\t\t<td>' + room + '</td>\n'
                     row += '\t\t<td>' + cmd + '</td>\n'
-                    row += '\t\t<td>' + job.comment() + '</td>\n'
-                    // console.log(day + ". " + job.hour() + ":" + job.minute() + ", " + room + " - " + cmd + " //" + job.comment());
+                    row += '\t\t<td>' + comment + '</td>\n'
                     row += '\t</tr>\n'
                     table += row
                 }
@@ -224,7 +228,7 @@ const server = http.createServer((req, res) => {
                 console.log(paramstring)
 				try {
 					require('crontab').load(function (err, crontab) {
-						var job = crontab.create(command + " " + paramstring.room + " " + paramstring.percent, null, paramstring.comment);
+						var job = crontab.create(command + " " + paramstring.room + " " + paramstring.percent, null, "uuid=" + uuidv4() + "&comment=" + paramstring.comment);
 						if (job == null) {
 							console.log('failed to create job');
 							res.end('Failed')
@@ -249,8 +253,22 @@ const server = http.createServer((req, res) => {
             } else if (req.url == "/delete_row_from_cron.html") {
                 console.log("del: ")
                 console.log(paramstring)
-                //TODO: cron this
-                res.end("זה עדין לא עובד")
+				try {
+					require('crontab').load(function (err, crontab) {
+							crontab.remove({comment:paramstring.uuid})
+							crontab.save(function(err, crontab) {
+								console.log(err)
+								res.end(err)
+							});
+					})
+				} catch (e) {
+					if (e.message == "process.getuid is not a function") {
+						console.log("add: crontab not working")
+					} else {
+						console.log(e)
+					}
+					res.end(err)
+				}
             } else {
                 console.log("POST: unknown URL!")
                 res.end()

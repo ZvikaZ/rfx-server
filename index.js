@@ -92,9 +92,11 @@ function addCronRow() {
     }
 }
 
-function deleteRow(row) {
+function deleteRow(row, uuid) {
+	console.log("deleteRow " + row + ", " + uuid)
     showDelModal("למחוק את שורה " + row + "?", function () {
-        ajaxPost('delete_row_from_cron.html', "row=" + row, function (responseText) {
+        ajaxPost('delete_row_from_cron.html', "uuid=" + uuid, function (responseText) {
+			initCronCmdsTable();
         })
     })
 }
