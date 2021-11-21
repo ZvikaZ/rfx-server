@@ -84,19 +84,21 @@ function addCronRow() {
             "&percent=" + $("#newCronPercent").val() +
             "&comment=" + $("#newCronComment").val(),
             function (responseText) {
-				console.log(responseText)
-				if (responseText != '')
-					showModal("היתקה תקלה")
-				initCronCmdsTable();
+                console.log(responseText)
+                if (responseText != '')
+                    showModal("היתה תקלה")
+                initCronCmdsTable();
             })
     }
 }
 
 function deleteRow(row, uuid) {
-	console.log("deleteRow " + row + ", " + uuid)
+    console.log("deleteRow " + row + ", " + uuid)
     showDelModal("למחוק את שורה " + row + "?", function () {
         ajaxPost('delete_row_from_cron.html', "uuid=" + uuid, function (responseText) {
-			initCronCmdsTable();
+            if (responseText != '')
+                showModal("היתה תקלה")
+            initCronCmdsTable();
         })
     })
 }
