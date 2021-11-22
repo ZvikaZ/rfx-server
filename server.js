@@ -20,7 +20,7 @@ function createCronTable(cb) {
             for (let job of jobs) {
                 if (job.isValid()) {
                     exec = job.command().split(' ')
-                    if (exec[0] == 'heliocron')
+                    if (exec[0] === 'heliocron')
                         exec.splice(0, 7)    // delete first 7 items
                     let room
                     switch (exec[1]) {
