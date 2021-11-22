@@ -136,3 +136,18 @@ function setDefaults() {
 
 window.onload = setDefaults;
 
+// https://stackoverflow.com/a/53279790
+$(document).ready(function(){
+    $('input[type="number"]').on('keyup',function(){
+        v = parseInt($(this).val());
+        min = parseInt($(this).attr('min'));
+        max = parseInt($(this).attr('max'));
+
+        if (v < min){
+            $(this).val(min);
+        } else if (v > max){
+            $(this).val(max);
+        }
+    })
+})
+
